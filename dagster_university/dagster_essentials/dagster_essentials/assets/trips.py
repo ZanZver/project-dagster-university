@@ -67,3 +67,28 @@ def taxi_trips() -> None:
         max_retries=10,
     )
     conn.execute(query)
+
+@dg.asset(
+    deps=["taxi_zones_file"]
+)
+def taxi_zones() -> None:
+    query = f"""
+        create or replace table zones as (
+            select
+                LocationID as zone_id,
+                zone,
+                borough,
+                the_geom as geometry
+            from '{constants.TAXI_ZONES_FILE_PATH}'
+        );
+    """#Note: BIG BRAIN MOVE FILE PATH1!!
+
+    conn = backoff(
+        fn=duckdb.connect,
+        retry_on=(RuntimeError, duckdb.IOException),
+        kwargs={
+            "database": os.getenv("DUCKDB_DATABASE"),
+        },
+        max_retries=10,
+    )
+    conn.execute(query)
