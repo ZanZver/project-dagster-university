@@ -1,12 +1,14 @@
 import dagster as dg
-from dagster_essentials.assets import constants
+
+from dagster_essentials.completed.lesson_8.assets import constants
+
+start_date = constants.START_DATE
+end_date = constants.END_DATE
 
 monthly_partition = dg.MonthlyPartitionsDefinition(
-    start_date=constants.START_DATE,
-    end_date=constants.END_DATE
+    start_date=start_date, end_date=end_date
 )
 
 weekly_partition = dg.WeeklyPartitionsDefinition(
-    start_date=constants.START_DATE,
-    end_date=constants.END_DATE   
+    start_date=start_date, end_date=end_date
 )
